@@ -16,6 +16,7 @@
 		3FEB87E426751B1C00C1A27E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FEB87E226751B1C00C1A27E /* LaunchScreen.storyboard */; };
 		3FEB87EF26751B1C00C1A27E /* Werkstuk2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEB87EE26751B1C00C1A27E /* Werkstuk2Tests.swift */; };
 		3FEB87FA26751B1C00C1A27E /* Werkstuk2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEB87F926751B1C00C1A27E /* Werkstuk2UITests.swift */; };
+		3FEB880B26751C7900C1A27E /* Groep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEB880A26751C7900C1A27E /* Groep.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		3FEB87F526751B1C00C1A27E /* Werkstuk2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Werkstuk2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FEB87F926751B1C00C1A27E /* Werkstuk2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Werkstuk2UITests.swift; sourceTree = "<group>"; };
 		3FEB87FB26751B1C00C1A27E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FEB880A26751C7900C1A27E /* Groep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groep.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				3FEB87E226751B1C00C1A27E /* LaunchScreen.storyboard */,
 				3FEB87E526751B1C00C1A27E /* Info.plist */,
 				3FEB87DD26751B1800C1A27E /* Werkstuk2.xcdatamodeld */,
+				3FEB880A26751C7900C1A27E /* Groep.swift */,
 			);
 			path = Werkstuk2;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FEB880B26751C7900C1A27E /* Groep.swift in Sources */,
 				3FEB87DF26751B1800C1A27E /* Werkstuk2.xcdatamodeld in Sources */,
 				3FEB87D926751B1800C1A27E /* ViewController.swift in Sources */,
 				3FEB87D526751B1800C1A27E /* AppDelegate.swift in Sources */,
