@@ -9,11 +9,11 @@
         <attribute name="region" optional="YES" attributeType="String"/>
         <attribute name="sex" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="LaatsteKeerGeUpdateCD" representedClassName="LaatsteKeerGeUpdateCD" syncable="YES" codeGenerationType="class">
+    <entity name="LaatsteKeerGeupdateCD" representedClassName="LaatsteKeerGeupdateCD" syncable="YES" codeGenerationType="class">
         <attribute name="datum" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
         <element name="GroepCD" positionX="-54" positionY="-9" width="128" height="134"/>
-        <element name="LaatsteKeerGeUpdateCD" positionX="-54" positionY="45" width="128" height="44"/>
+        <element name="LaatsteKeerGeupdateCD" positionX="-54" positionY="45" width="128" height="44"/>
     </elements>
 </model>

@@ -12,6 +12,9 @@ import Charts
 class ViewController: UIViewController {
     
     @IBOutlet weak var PieChart: PieChartView!
+    @IBOutlet weak var labelLaatsteUpdate: UILabel!
+    @IBOutlet weak var buttonUpdate: UIButton!
+    
     
     var astraZenecaDataEntry = PieChartDataEntry(value: 0)
     var johnsonJohnsonDataEntry = PieChartDataEntry(value: 0)
@@ -22,29 +25,28 @@ class ViewController: UIViewController {
     
     var groepen: [Groep]?
     var groepenCD: [GroepCD]?
+    var update: [LaatsteKeerGeupdateCD]?
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+       
         getData()
         //deleteAllData()
         if groepenCD?.count == 0 {
-            print("niets in database")
             getDataFromWebservice()
-            //overzettenNaarCD()
         }
-        
         if (groepenCD?.count)! > 0 {
-            print("Items in database")
             updateChartData()
         }
-        print("dit moet er achter komen")
     }
     
     func getData() -> Void {
         do {
             groepenCD = try self.context.fetch(GroepCD.fetchRequest())
+            update = try self.context.fetch(LaatsteKeerGeupdateCD.fetchRequest())
         }
         catch {
             print("Kan data niet van GroepCD ophalen")
@@ -53,7 +55,6 @@ class ViewController: UIViewController {
     
     func getDataFromWebservice() -> Void {
         let url = URL(string: "https://epistat.sciensano.be/Data/COVID19BE_VACC.json")!
-        print("na url maken")
         let task = URLSession.shared.dataTask(with: url) {
             (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if let jsonData = data
@@ -70,7 +71,6 @@ class ViewController: UIViewController {
                             groep.SEX = "Onbekend"
                         }
                         print(groep.REGION!)
-                        
                     }
                 }
                 catch {
@@ -84,7 +84,6 @@ class ViewController: UIViewController {
             }
         }
         task.resume()
-        
     }
     
     func overzettenNaarCD() -> Void {
@@ -105,13 +104,20 @@ class ViewController: UIViewController {
             teller = teller + 1
             print(String(teller) + " item(s) overgezet")
         }
+        if update != nil {
+            for u in self.update! {
+                context.delete(u)
+            }
+            try! context.save()
+        }
+        let updateTijd = LaatsteKeerGeupdateCD(context: self.context)
+        updateTijd.datum = Date()
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
     }
     
     func deleteAllData() -> Void {
         var teller: Int
         teller = 0;
-        print("buiten loop")
         for groep in self.groepenCD! {
             teller = teller + 1
             print(String(teller) + " delete")
@@ -120,6 +126,9 @@ class ViewController: UIViewController {
         try! context.save()
     }
     
+    // Brian Advent, iOS Swift Tutorial: Create Beautiful Charts
+    // https://www.youtube.com/watch?v=GNf-SsDBQ20&t=3s
+    // Geraadpleegd op 14 juni 2021
     func updateChartData() {
         astraZenecaDataEntry.value = 0
         astraZenecaDataEntry.label = "Astra"
@@ -157,7 +166,13 @@ class ViewController: UIViewController {
         let colors = [UIColor(named: "Astra"), UIColor(named:"Johnson"), UIColor(named: "Moderna"), UIColor(named: "Pfizer")]
         chartDataSet.colors = colors as! [NSUIColor]
         PieChart.data = chartData
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "dd-MM-yyyy hh:mm:ss"
+        labelLaatsteUpdate.text = "Laaste update: " + dateformatter.string(from: (update?.first?.datum)!)
     }
 
+    @IBAction func UpdateData(_ sender: Any) {
+        getDataFromWebservice()
+    }
 }
 
