@@ -14,5 +14,5 @@ struct Groep: Codable {
     var SEX: String?
     var BRAND: String
     var DOSE: String
-    var COUNT: Int
+    var COUNT: Int32
 }
