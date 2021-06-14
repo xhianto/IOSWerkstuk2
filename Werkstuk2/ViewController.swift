@@ -13,6 +13,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var PieChart: PieChartView!
     
+    var astraZenecaDataEntry = PieChartDataEntry(value: 0)
+    var johnsonJohnsonDataEntry = PieChartDataEntry(value: 0)
+    var modernaDataEntry = PieChartDataEntry(value: 0)
+    var pfizerDataEntry = PieChartDataEntry(value: 0)
+    
+    var vaccinatieDataEntries = [PieChartDataEntry]()
+    
     var groepen: [Groep]?
     var groepenCD: [GroepCD]?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -20,13 +27,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        do {
-            groepenCD = try self.context.fetch(GroepCD.fetchRequest())
-        }
-        catch {
-            print("Kan data niet van GroepCD ophalen")
-        }
-        deleteAllData()
+        getData()
+        //deleteAllData()
         if groepenCD?.count == 0 {
             print("niets in database")
             getDataFromWebservice()
@@ -35,6 +37,17 @@ class ViewController: UIViewController {
         
         if (groepenCD?.count)! > 0 {
             print("Items in database")
+            updateChartData()
+        }
+        print("dit moet er achter komen")
+    }
+    
+    func getData() -> Void {
+        do {
+            groepenCD = try self.context.fetch(GroepCD.fetchRequest())
+        }
+        catch {
+            print("Kan data niet van GroepCD ophalen")
         }
     }
     
@@ -66,6 +79,8 @@ class ViewController: UIViewController {
             }
             DispatchQueue.main.async {
                 self.overzettenNaarCD()
+                self.getData()
+                self.updateChartData()
             }
         }
         task.resume()
@@ -101,8 +116,47 @@ class ViewController: UIViewController {
             teller = teller + 1
             print(String(teller) + " delete")
             context.delete(groep)
-            try! context.save()
         }
+        try! context.save()
+    }
+    
+    func updateChartData() {
+        astraZenecaDataEntry.value = 0
+        astraZenecaDataEntry.label = "Astra"
+        johnsonJohnsonDataEntry.value = 0
+        johnsonJohnsonDataEntry.label = "J&J"
+        modernaDataEntry.value = 0
+        modernaDataEntry.label = "Moderna"
+        pfizerDataEntry.value = 0
+        pfizerDataEntry.label = "Pfizer"
+        
+        for groep in groepenCD! {
+            print(groep.brand!)
+            switch groep.brand {
+            case "AstraZeneca-Oxford":
+                astraZenecaDataEntry.value = astraZenecaDataEntry.value + 1
+            case "Johnson&Johnson":
+                johnsonJohnsonDataEntry.value = johnsonJohnsonDataEntry.value + 1
+            case "Moderna":
+                modernaDataEntry.value = modernaDataEntry.value + 1
+            case "Pfizer-BioNTech":
+                pfizerDataEntry.value = pfizerDataEntry.value + 1
+            default:
+                print("Geen brand")
+            }
+        }
+        print(astraZenecaDataEntry.value)
+        print(johnsonJohnsonDataEntry.value)
+        print(modernaDataEntry.value)
+        print(pfizerDataEntry.value)
+        PieChart.chartDescription?.text = ""
+        vaccinatieDataEntries = [astraZenecaDataEntry, johnsonJohnsonDataEntry, modernaDataEntry, pfizerDataEntry]
+        let chartDataSet = PieChartDataSet(entries: vaccinatieDataEntries, label: nil)
+        let chartData = PieChartData(dataSet: chartDataSet)
+        
+        let colors = [UIColor(named: "Astra"), UIColor(named:"Johnson"), UIColor(named: "Moderna"), UIColor(named: "Pfizer")]
+        chartDataSet.colors = colors as! [NSUIColor]
+        PieChart.data = chartData
     }
 
 }
