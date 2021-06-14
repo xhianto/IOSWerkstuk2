@@ -22,26 +22,26 @@ class ViewController: UIViewController {
         print("na url maken")
         let task = URLSession.shared.dataTask(with: url) {
             (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            print("na sessie")
             if let jsonData = data
             {
-                print("na data")
                 let decoder = JSONDecoder()
                 do {
                     self.Groepen = try decoder.decode([Groep].self, from: jsonData)
                     //let formatter = DateFormatter()
-                    for groep in self.Groepen! {
-                        if groep.REGION != nil {
-                            print(groep.AGEGROUP)
-                            print(groep.REGION!)
+                    for var groep in self.Groepen! {
+                        if groep.REGION == nil {
+                            groep.REGION = "Onbekend"
                         }
+                        if groep.SEX == nil {
+                            groep.SEX = "Onbekend"
+                        }
+                        print(groep.REGION!)
                     }
                 }
                 catch {
                     print(error.localizedDescription)
                 }
             }
-            print("skipping data")
         }
         task.resume()
     }
